@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Counter;
 
-class CreateCountersTable extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,19 +13,13 @@ class CreateCountersTable extends Migration
      */
     public function up()
     {
-        Schema::create('counters', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key')->unique();
-            $table->string('prefix');
-            $table->string('value');
+            $table->string('item_code')->unique();
+            $table->text('description');
+            $table->double('unit_price');
             $table->timestamps();
         });
-        Counter::create([
-            'key' => 'invoice',
-            'prefix' => 'INV-',
-            'value' => 10000
-        ]);
-
     }
 
     /**
@@ -36,6 +29,6 @@ class CreateCountersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('counters');
+        Schema::dropIfExists('products');
     }
 }
