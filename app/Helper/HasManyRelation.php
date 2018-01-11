@@ -28,7 +28,7 @@ trait HasManyRelation{
                 $localKey = $model->getKeyName();
                 $foreignKey = $this->{$key}()->getForeignKeyName();
                 if (isset($item[$foreignKey])){
-                    $localId = $item[$localId];
+                    $localId = $item[$localKey];
                     $found = $model->where($foreignKey,$parentId)
                         ->where($localKey,$localId)
                         ->first();
@@ -37,7 +37,7 @@ trait HasManyRelation{
                         $found->save();
                         $updateIds[] = $localId;
                     }else{
-                       $newItems[] = $model->fill[$item];
+                       $newItems[] = $model->fill($item);
                     }
                 }
             }
