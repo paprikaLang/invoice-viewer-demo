@@ -108,7 +108,6 @@ class InvoiceController extends Controller
 
         ]);
 
-        $invoice = new Invoice;
         $invoice->fill($request->except('items'));
 
         $invoice->sub_total = collect($request->items)->sum(function ($item){

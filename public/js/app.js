@@ -1739,8 +1739,77 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     query: query
                 });
             }
+        },
+        detailPage: function detailPage(item) {
+            this.$router.push('/invoices/' + item.id);
         }
     }
+});
+
+/***/ }),
+
+/***/ "./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/invoices/show.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/_vue@2.5.13@vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_api__ = __webpack_require__("./resources/assets/js/lib/api.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            show: false,
+            model: {
+                items: [],
+                customer: {}
+            }
+        };
+    },
+    beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+        var _this = this;
+
+        this.show = false;
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices/${to.params.id}').then(function (res) {
+            _this.setData(res);
+            next();
+        });
+    },
+    mounted: function mounted() {
+        var _this2 = this;
+
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices/' + this.$route.params.id).then(function (response) {
+            _this2.setData(response);
+            console.log('success');
+        });
+    },
+
+    methods: {
+        setData: function setData(res) {
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data, 'model', res.data.model);
+            this.show = true;
+        }
+    }
+
 });
 
 /***/ }),
@@ -2335,7 +2404,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    show\n")])
+  return _vm.show
+    ? _c("div", { staticClass: "panel" }, [
+        _c("div", { staticClass: "panel-heading" }, [
+          _c("span", { staticClass: "panel-title" }, [
+            _vm._v(_vm._s(_vm.model.number))
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            [
+              _c(
+                "router-link",
+                { staticClass: "btn", attrs: { to: "/invoices" } },
+                [_vm._v("Back")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass: "btn",
+                  attrs: { to: "`/invoices/${model.id}/edit`" }
+                },
+                [_vm._v("Edit")]
+              ),
+              _vm._v(" "),
+              _c("button", { staticClass: "btn btn-error" }, [_vm._v("Delete")])
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-body" })
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2443,23 +2545,36 @@ var render = function() {
         _c(
           "tbody",
           _vm._l(_vm.model.data, function(item) {
-            return _c("tr", { key: item.data }, [
-              _c("td", { staticClass: "w-1" }, [_vm._v(_vm._s(item.id))]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-3" }, [_vm._v(_vm._s(item.date))]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-3" }, [_vm._v(_vm._s(item.number))]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-9" }, [
-                _vm._v(_vm._s(item.customer.text))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-3" }, [_vm._v(_vm._s(item.due_date))]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-3" }, [
-                _vm._v(_vm._s(_vm._f("formatMoney")(item.total)))
-              ])
-            ])
+            return _c(
+              "tr",
+              {
+                key: item.data,
+                on: {
+                  click: function($event) {
+                    _vm.detailPage(item)
+                  }
+                }
+              },
+              [
+                _c("td", { staticClass: "w-1" }, [_vm._v(_vm._s(item.id))]),
+                _vm._v(" "),
+                _c("td", { staticClass: "w-3" }, [_vm._v(_vm._s(item.date))]),
+                _vm._v(" "),
+                _c("td", { staticClass: "w-3" }, [_vm._v(_vm._s(item.number))]),
+                _vm._v(" "),
+                _c("td", { staticClass: "w-9" }, [
+                  _vm._v(_vm._s(item.customer.text))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "w-3" }, [
+                  _vm._v(_vm._s(item.due_date))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "w-3" }, [
+                  _vm._v(_vm._s(_vm._f("formatMoney")(item.total)))
+                ])
+              ]
+            )
           })
         )
       ])
@@ -16129,8 +16244,10 @@ function byMethod(method, url, data) {
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-    routes: [{ path: '/', redirect: '/invoices' }, { path: '/invoices', component: __webpack_require__("./resources/assets/js/views/invoices/index.vue") }, { path: '/invoices/create', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue") }, { path: '/invoices/:id/edit', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue"), meta: { mode: 'edit' } }, { path: 'invoices/:id', component: __webpack_require__("./resources/assets/js/views/invoices/show.vue") }]
+
+    routes: [{ path: '/', redirect: '/invoices' }, { path: '/invoices', component: __webpack_require__("./resources/assets/js/views/invoices/index.vue") }, { path: '/invoices/create', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue") }, { path: '/invoices/:id', component: __webpack_require__("./resources/assets/js/views/invoices/show.vue") }, { path: '/invoices/:id/edit', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue"), meta: { mode: 'edit' } }]
 });
+
 /* harmony default export */ __webpack_exports__["a"] = (router);
 
 /***/ }),
@@ -16237,7 +16354,7 @@ module.exports = Component.exports
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/_vue-loader@13.7.0@vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__("./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/invoices/show.vue")
 /* template */
 var __vue_template__ = __webpack_require__("./node_modules/_vue-loader@13.7.0@vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-138d96e3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/views/invoices/show.vue")
 /* template functional */
