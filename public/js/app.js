@@ -1700,7 +1700,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices', to.query).then(function (res) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])('/api/invoices', to.query).then(function (res) {
             next(function (vm) {
                 return vm.setData(res);
             });
@@ -1709,7 +1709,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
         var _this = this;
 
-        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices', to.query).then(function (res) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])('/api/invoices', to.query).then(function (res) {
             _this.setData(res);
             next();
         });
@@ -1771,6 +1771,86 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1789,7 +1869,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.show = false;
-        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices/${to.params.id}').then(function (res) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])('/api/invoices/' + this.$route.params.id).then(function (res) {
             _this.setData(res);
             next();
         });
@@ -1797,7 +1877,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         var _this2 = this;
 
-        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* get */])('/api/invoices/' + this.$route.params.id).then(function (response) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])('/api/invoices/' + this.$route.params.id).then(function (response) {
             _this2.setData(response);
             console.log('success');
         });
@@ -1807,6 +1887,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         setData: function setData(res) {
             __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data, 'model', res.data.model);
             this.show = true;
+        },
+        deleteItem: function deleteItem() {
+            var _this3 = this;
+
+            Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* byMethod */])('delete', '/api/invoices/' + this.model.id).then(function (res) {
+                if (res.data.deleted) {
+                    _this3.$router.push('/invoices');
+                }
+            });
         }
     }
 
@@ -2429,17 +2518,169 @@ var render = function() {
                 [_vm._v("Edit")]
               ),
               _vm._v(" "),
-              _c("button", { staticClass: "btn btn-error" }, [_vm._v("Delete")])
+              _c(
+                "button",
+                { staticClass: "btn btn-error", on: { click: _vm.deleteItem } },
+                [_vm._v("Delete")]
+              )
             ],
             1
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "panel-body" })
+        _c("div", { staticClass: "panel-body" }, [
+          _c("div", { staticClass: "document" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("strong", [_vm._v("To:")]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("span", [_vm._v(_vm._s(_vm.model.customer.text))]),
+                  _vm._v(" "),
+                  _c("pre", [_vm._v(_vm._s(_vm.model.customer.address))])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6 col-offset-12" }, [
+                _c("table", { staticClass: "document-summary" }, [
+                  _c("tbody", [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [_vm._v("Number")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(_vm.model.number))])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [_vm._v("Date")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(_vm.model.date))])
+                    ]),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("td", [_vm._v("Due Date")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(_vm.model.due_date))])
+                    ]),
+                    _vm._v(" "),
+                    _vm.model.reference
+                      ? _c("tr", [
+                          _c("td", [_vm._v("Reference")]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.model.reference))])
+                        ])
+                      : _vm._e()
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "document-body" }, [
+            _c("table", { staticClass: "table document-table" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.model.items, function(item) {
+                  return _c("tr", { key: item.id }, [
+                    _c("td", { staticClass: "w-3" }, [
+                      _vm._v(_vm._s(item.product.item_code))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "w-12" }, [
+                      _c("pre", [_vm._v(_vm._s(item.product.description))])
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "w-3" }, [
+                      _vm._v(_vm._s(_vm._f("formatMoney")(item.unit_price)))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "w-2" }, [
+                      _vm._v(_vm._s(item.qty))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "w-4" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("formatMoney")(item.qty * item.unit_price)
+                        )
+                      )
+                    ])
+                  ])
+                })
+              ),
+              _vm._v(" "),
+              _c("tfoot", [
+                _c("tr", [
+                  _c("td", { attrs: { colspan: "4" } }, [_vm._v("Sub Total")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("formatMoney")(_vm.model.sub_total)))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", { attrs: { colspan: "4" } }, [_vm._v("Discount")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("formatMoney")(_vm.model.discount)))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", { attrs: { colspan: "4" } }, [
+                    _vm._v("Grand Total")
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("formatMoney")(_vm.model.total)))
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "document-footer" }, [
+            _c("strong", [_vm._v("Terms and Conditions")]),
+            _vm._v(" "),
+            _c("pre", [_vm._v(_vm._s(_vm.model.term_and_conditions))])
+          ])
+        ])
       ])
     : _vm._e()
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", { attrs: { colspan: "2" } }, [
+        _c("span", { staticClass: "document-title" }, [_vm._v("INVOICE")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Item Code")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Description")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Unit Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Qty")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -16209,8 +16450,8 @@ var app = new Vue({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = get;
-/* unused harmony export byMethod */
+/* harmony export (immutable) */ __webpack_exports__["b"] = get;
+/* harmony export (immutable) */ __webpack_exports__["a"] = byMethod;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("./node_modules/_axios@0.17.1@axios/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
