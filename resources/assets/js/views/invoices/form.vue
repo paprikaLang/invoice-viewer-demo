@@ -246,12 +246,7 @@
 
                        this.isProcessing = true
                        this.success(res)
-<<<<<<< HEAD
-
-=======
-               
->>>>>>> 8004771461a2b1ecb47c77ede50cdc3b47eb7896
-               })
+                    })
                     .catch((error) => {
                          if(error.response.status === 422){
                              this.errors = error.response.data.errors

@@ -1631,10 +1631,431 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/invoices/form.vue":
-/***/ (function(module, exports) {
+/***/ "./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/typeahead/Typeahead.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token (249:2)\n\n\u001b[0m \u001b[90m 247 | \u001b[39m                       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39misProcessing \u001b[33m=\u001b[39m \u001b[36mtrue\u001b[39m\n \u001b[90m 248 | \u001b[39m                       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msuccess(res)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 249 | \u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\n \u001b[90m     | \u001b[39m  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 250 | \u001b[39m\n \u001b[90m 251 | \u001b[39m\u001b[33m===\u001b[39m\u001b[33m===\u001b[39m\u001b[33m=\u001b[39m\n \u001b[90m 252 | \u001b[39m               \u001b[0m\n");
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/_vue@2.5.13@vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_api__ = __webpack_require__("./resources/assets/js/lib/api.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        initialize: {
+            default: null
+        },
+        url: {
+            required: true
+        },
+        tabIndex: {
+            default: 0
+        }
+    },
+    data: function data() {
+        return {
+            selectIndex: -1,
+            isOpen: false,
+            search: '',
+            results: []
+        };
+    },
+
+    computed: {
+        selectedText: function selectedText() {
+            return this.initialize && this.initialize.text ? this.initialize.text : 'Type or click to select';
+        }
+    },
+    methods: {
+        onToggle: function onToggle() {
+            if (this.isOpen) {
+                this.isOpen = false;
+            } else {
+                this.open();
+            }
+        },
+        onKey: function onKey(e) {
+            var KeyCode = e.KeyCode || e.which;
+            if (!e.shiftKey && KeyCode !== 9 && !this.isOpen) {
+                this.open();
+            }
+        },
+        open: function open() {
+            var _this = this;
+
+            this.fetchData('');
+            this.isOpen = true;
+            this.$nextTick(function () {
+                _this.$refs.search.focus();
+            });
+        },
+        fetchData: function fetchData(q) {
+            var _this2 = this;
+
+            Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])(this.url, { q: q }).then(function (res) {
+                __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(_this2.$data, 'results', res.data.results);
+            });
+        },
+        onBlur: function onBlur() {
+            this.close();
+        },
+        onEsc: function onEsc() {
+            this.close();
+        },
+        close: function close() {
+            this.results = [];
+            this.isOpen = false;
+            this.search = '';
+            this.selectIndex = -1;
+        },
+        onSearch: function onSearch(e) {
+            var q = e.target.value;
+            this.selectIndex = 0;
+            this.fetchData(q);
+        },
+        onUpKey: function onUpKey(e) {
+            if (this.selectIndex > 0) {
+                this.selectIndex--;
+            }
+        },
+        onDownKey: function onDownKey(e) {
+            if (this.results.length - 1 > this.selectIndex) {
+                this.selectIndex++;
+            }
+        },
+        onEnterKey: function onEnterKey() {
+            var found = this.results[this.selectIndex];
+            if (found) {
+                this.select(found);
+            }
+        },
+        select: function select(result) {
+            this.$emit('input', {
+                target: {
+                    value: result
+                }
+            });
+            this.close();
+        },
+        onMouse: function onMouse(index) {
+            this.selectIndex = index;
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/views/invoices/form.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/_vue@2.5.13@vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_api__ = __webpack_require__("./resources/assets/js/lib/api.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_typeahead__ = __webpack_require__("./resources/assets/js/components/typeahead/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+function initialize(to) {
+    var urls = {
+        'create': '/api/invoices/create',
+        'edit': '/api/invoices/' + to.params.id + '/edit'
+    };
+
+    return urls[to.meta.mode] || urls['create'];
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        Typeahead: __WEBPACK_IMPORTED_MODULE_2__components_typeahead__["a" /* Typeahead */]
+    },
+    data: function data() {
+        return {
+            form: {},
+            errors: {},
+            isProcessing: false,
+            show: false,
+            resource: '/invoices',
+            store: '/api/invoices',
+            method: 'POST',
+            title: 'Create',
+            productURL: '/api/products',
+            customerURL: '/api/customers'
+        };
+    },
+
+    computed: {
+        subTotal: function subTotal() {
+            return this.form.items.reduce(function (carry, item) {
+                return carry + (Number(item.unit_price) + Number(item.qty));
+            }, 0);
+        },
+        total: function total() {
+            return this.subTotal - Number(this.form.discount);
+        }
+    },
+    beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])(initialize(to)).then(function (res) {
+            next(function (vm) {
+                return vm.setData(res);
+            });
+        });
+    },
+    beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+        var _this = this;
+
+        this.show = false;
+        Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])(initialize(to)).then(function (res) {
+            _this.setData(res);
+            next();
+        });
+    },
+
+    methods: {
+        setData: function setData(res) {
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data, 'form', res.data.form);
+            if (this.$route.meta.mode === 'edit') {
+                this.store = '/api/invoices/' + this.$route.params.id;
+                this.method = 'PUT';
+                this.title = 'Edit';
+            }
+            this.show = true;
+        },
+        addNewLine: function addNewLine() {
+            this.form.items.push({
+                product_id: null,
+                product: null,
+                unit_price: 0,
+                qty: 1
+            });
+        },
+        onCustomer: function onCustomer(e) {
+            var customer = e.target.value;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data.form, 'customer', customer);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data.form, 'customer_id', customer.id);
+        },
+        onProduct: function onProduct(index, e) {
+            var product = e.target.value;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'product', product);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'product_id', product.id);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'unit_price', product.unit_price);
+        },
+        removeItem: function removeItem(index) {
+            this.form.items.splice(index, 1);
+        },
+        onCancel: function onCancel() {
+            if (this.$route.meta.mode === 'edit') {
+                this.$router.push(this.resource + '/' + this.form.id);
+            } else {
+                this.$router.push('' + this.resource);
+            }
+        },
+        onSave: function onSave() {
+            var _this2 = this;
+
+            this.errors = {};
+
+            Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* byMethod */])(this.method, this.store, this.form).then(function (res) {
+
+                _this2.isProcessing = true;
+                _this2.success(res);
+            }).catch(function (error) {
+                if (error.response.status === 422) {
+                    _this2.errors = error.response.data.errors;
+                }
+                _this2.isProcessing = false;
+            });
+        },
+        success: function success(res) {
+            this.$router.push(this.resource + '/' + res.data.id);
+        }
+    }
+});
 
 /***/ }),
 
@@ -2694,6 +3115,152 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-loader/node_modules/vue-hot-reload-api")      .rerender("data-v-138d96e3", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/_vue-loader@13.7.0@vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4011d098\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/typeahead/Typeahead.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { class: [_vm.isOpen ? "typeahead typeahead-open" : "typeahead"] },
+    [
+      _c(
+        "div",
+        { staticClass: "typeahead-inner" },
+        [
+          _c(
+            "div",
+            {
+              ref: "toggle",
+              staticClass: "form-control typeahead-selected",
+              attrs: { tabindex: _vm.tabIndex },
+              on: { click: _vm.onToggle, keydown: _vm.onKey }
+            },
+            [_c("span", [_vm._v(_vm._s(_vm.selectedText))])]
+          ),
+          _vm._v(" "),
+          _c("transition", { attrs: { name: "fade", mode: "out-in" } }, [
+            _vm.isOpen
+              ? _c("div", { staticClass: "typeahead-dropdown" }, [
+                  _c("div", { staticClass: "typeahead-input_wrap" }, [
+                    _c("input", {
+                      ref: "search",
+                      staticClass: "typeahead-input",
+                      attrs: {
+                        type: "text",
+                        autocomplete: "off",
+                        placeholder: "Search..."
+                      },
+                      on: {
+                        blur: _vm.onBlur,
+                        input: _vm.onSearch,
+                        keydown: [
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "esc", 27, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.onEsc($event)
+                          },
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "up", 38, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.onUpKey($event)
+                          },
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "down", 40, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.onDownKey($event)
+                          },
+                          function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k($event.keyCode, "enter", 13, $event.key)
+                            ) {
+                              return null
+                            }
+                            _vm.onEnterKey($event)
+                          }
+                        ]
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _vm.results.length
+                    ? _c(
+                        "ul",
+                        { staticClass: "typeahead-list" },
+                        _vm._l(_vm.results, function(result, index) {
+                          return _c(
+                            "li",
+                            { key: result.id, staticClass: "typeahead-item" },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  class: [
+                                    "typeahead-link",
+                                    _vm.selectIndex === index
+                                      ? "typeahead-active"
+                                      : ""
+                                  ],
+                                  on: {
+                                    mousedown: function($event) {
+                                      $event.preventDefault()
+                                      _vm.select(result)
+                                    },
+                                    mouseover: function($event) {
+                                      $event.preventDefault()
+                                      _vm.onMouse(index)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                         " +
+                                      _vm._s(result.text) +
+                                      "\n                     "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        })
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e()
+          ])
+        ],
+        1
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-loader/node_modules/vue-hot-reload-api")      .rerender("data-v-4011d098", module.exports)
   }
 }
 
@@ -16930,6 +17497,67 @@ var app = new Vue({
     },
     router: __WEBPACK_IMPORTED_MODULE_1__router__["a" /* default */]
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/typeahead/Typeahead.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/_vue-loader@13.7.0@vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/_babel-loader@7.1.2@babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/typeahead/Typeahead.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/_vue-loader@13.7.0@vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4011d098\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/_vue-loader@13.7.0@vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/typeahead/Typeahead.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/typeahead/Typeahead.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4011d098", Component.options)
+  } else {
+    hotAPI.reload("data-v-4011d098", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/typeahead/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Typeahead_vue__ = __webpack_require__("./resources/assets/js/components/typeahead/Typeahead.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Typeahead_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Typeahead_vue__);
+/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__Typeahead_vue___default.a; });
+
+
+
 
 /***/ }),
 
