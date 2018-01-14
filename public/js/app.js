@@ -1860,6 +1860,82 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1871,7 +1947,7 @@ function initialize(to) {
         'edit': '/api/invoices/' + to.params.id + '/edit'
     };
 
-    return urls[to.meta.mode];
+    return urls[to.meta.mode] || urls['create'];
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1891,6 +1967,17 @@ function initialize(to) {
             productURL: '/api/products',
             customerURL: '/api/customers'
         };
+    },
+
+    computed: {
+        subTotal: function subTotal() {
+            return this.form.items.reduce(function (carry, item) {
+                return carry + (Number(item.unit_price) + Number(item.qty));
+            }, 0);
+        },
+        total: function total() {
+            return this.subTotal - Number(this.form.discount);
+        }
     },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["b" /* get */])(initialize(to)).then(function (res) {
@@ -1919,9 +2006,54 @@ function initialize(to) {
             }
             this.show = true;
         },
-        onCustomer: function onCustomer() {},
-        onProduct: function onProduct() {},
-        removeItem: function removeItem() {}
+        addNewLine: function addNewLine() {
+            this.form.items.push({
+                product_id: null,
+                product: null,
+                unit_price: 0,
+                qty: 1
+            });
+        },
+        onCustomer: function onCustomer(e) {
+            var customer = e.target.value;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data.form, 'customer', customer);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.$data.form, 'customer_id', customer.id);
+        },
+        onProduct: function onProduct(index, e) {
+            var product = e.target.value;
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'product', product);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'product_id', product.id);
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.set(this.form.items[index], 'unit_price', product.unit_price);
+        },
+        removeItem: function removeItem(index) {
+            this.form.items.splice(index, 1);
+        },
+        onCancel: function onCancel() {
+            if (this.$route.meta.mode === 'edit') {
+                this.$router.push(this.resource + '/' + this.form.id);
+            } else {
+                this.$router.push('' + this.resource);
+            }
+        },
+        onSave: function onSave() {
+            var _this2 = this;
+
+            this.errors = {};
+
+            Object(__WEBPACK_IMPORTED_MODULE_1__lib_api__["a" /* byMethod */])(this.method, this.store, this.form).then(function (res) {
+
+                _this2.isProcessing = true;
+                _this2.success(res);
+            }).catch(function (error) {
+                if (error.response.status === 422) {
+                    _this2.errors = error.response.data.errors;
+                }
+                _this2.isProcessing = false;
+            });
+        },
+        success: function success(res) {
+            this.$router.push(this.resource + '/' + res.data.id);
+        }
     }
 });
 
@@ -3164,7 +3296,17 @@ var render = function() {
                       initialize: _vm.form.customer
                     },
                     on: { input: _vm.onCustomer }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.customer_id
+                    ? _c("small", { staticClass: "error-control" }, [
+                        _vm._v(
+                          "\n                       " +
+                            _vm._s(_vm.errors.customer_id[0]) +
+                            "\n                   "
+                        )
+                      ])
+                    : _vm._e()
                 ],
                 1
               )
@@ -3299,7 +3441,290 @@ var render = function() {
           _vm._v(" "),
           _c("hr"),
           _vm._v(" "),
-          _vm._m(1)
+          _c("table", { staticClass: "form-table" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.form.items, function(item, index) {
+                return _c("tr", [
+                  _c(
+                    "td",
+                    { staticClass: "w-14" },
+                    [
+                      _c("typeahead", {
+                        attrs: {
+                          url: _vm.productURL,
+                          initialize: item.product
+                        },
+                        on: {
+                          input: function($event) {
+                            _vm.onProduct(index, $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors["items." + index + ".product_id"]
+                        ? _c("small", { staticClass: "error-control" }, [
+                            _vm._v(
+                              "\n                           " +
+                                _vm._s(
+                                  _vm.errors[
+                                    "items." + index + ".product_id"
+                                  ][0]
+                                ) +
+                                "\n                       "
+                            )
+                          ])
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "w-4" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: item.unit_price,
+                          expression: "item.unit_price"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: item.unit_price },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(item, "unit_price", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.errors["items." + index + ".unit_price"]
+                      ? _c("small", { staticClass: "error-control" }, [
+                          _vm._v(
+                            "\n                           " +
+                              _vm._s(
+                                _vm.errors["items." + index + ".unit_price"][0]
+                              ) +
+                              "\n                       "
+                          )
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "w-2" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: item.qty,
+                          expression: "item.qty"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: item.qty },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(item, "qty", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.errors["items." + index + ".qty"]
+                      ? _c("small", { staticClass: "error-control" }, [
+                          _vm._v(
+                            "\n                           " +
+                              _vm._s(_vm.errors["items." + index + ".qty"][0]) +
+                              "\n                       "
+                          )
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "w-4" }, [
+                    _c("span", { staticClass: "form-control" }, [
+                      _vm._v(
+                        "\n                           " +
+                          _vm._s(
+                            _vm._f("formatMoney")(
+                              Number(item.qty) * Number(item.unit_price)
+                            )
+                          ) +
+                          "\n                       "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "form-remove",
+                        on: {
+                          click: function($event) {
+                            _vm.removeItem(index)
+                          }
+                        }
+                      },
+                      [_vm._v("×")]
+                    )
+                  ])
+                ])
+              })
+            ),
+            _vm._v(" "),
+            _c("tfoot", [
+              _c("tr", [
+                _c("td", { attrs: { colspan: "2" } }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm",
+                      on: { click: _vm.addNewLine }
+                    },
+                    [_vm._v("Add New Line")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "form-summary" }, [
+                  _vm._v("Sub Total")
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm._f("formatMoney")(_vm.subTotal)))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c(
+                  "td",
+                  { staticClass: "form-summary", attrs: { colspan: "3" } },
+                  [_vm._v("Discount")]
+                ),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.discount,
+                        expression: "form.discount"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.form.discount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "discount", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.discount
+                    ? _c("small", { staticClass: "form-control" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.errors.discount[0]) +
+                            "\n                        "
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c(
+                  "td",
+                  { staticClass: "form-summary", attrs: { colspan: "3" } },
+                  [_vm._v("Grand Total")]
+                ),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm._f("formatMoney")(_vm.total)))])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Terms and Conditions")]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.term_and_conditions,
+                      expression: "form.term_and_conditions"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  domProps: { value: _vm.form.term_and_conditions },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.form,
+                        "term_and_conditions",
+                        $event.target.value
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.term_and_conditions
+                  ? _c("small", { staticClass: "error-control" }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.errors.term_and_conditions[0]) +
+                          "\n                    "
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "panel-footer flex-end" }, [
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { disabled: _vm.isProcessing },
+                on: { click: _vm.onSave }
+              },
+              [_vm._v("Save")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn",
+                attrs: { disabled: _vm.isProcessing },
+                on: { click: _vm.onCancel }
+              },
+              [_vm._v("Cancel")]
+            )
+          ])
         ])
       ])
     : _vm._e()
@@ -3318,17 +3743,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "form-table" }, [
-      _c("thead", [
-        _c("tr", [
-          _c("th", [_vm._v("Item Description")]),
-          _vm._v(" "),
-          _c("th", [_vm._v("Unit Price")]),
-          _vm._v(" "),
-          _c("th", [_vm._v("Qty")]),
-          _vm._v(" "),
-          _c("th", [_vm._v("Total")])
-        ])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Item Description")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Unit Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Qty")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total")])
       ])
     ])
   }

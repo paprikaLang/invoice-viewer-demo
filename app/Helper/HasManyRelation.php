@@ -15,7 +15,7 @@ trait HasManyRelation{
     }
     public function updateHasMany($relations){
         $this->save();
-        $parentKey = $this->getKeyName;
+        $parentKey = $this->getKeyName();
         $parentId = $this->getAttribute($parentKey);
 
         foreach ($relations as $key => $items){
@@ -27,7 +27,7 @@ trait HasManyRelation{
                 $model = $this->{$key}()->getModel();
                 $localKey = $model->getKeyName();
                 $foreignKey = $this->{$key}()->getForeignKeyName();
-                if (isset($item[$foreignKey])){
+                if (isset($item[$localKey])){
                     $localId = $item[$localKey];
                     $found = $model->where($foreignKey,$parentId)
                         ->where($localKey,$localId)

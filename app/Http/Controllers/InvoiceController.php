@@ -42,7 +42,7 @@ class InvoiceController extends Controller
     }
 
     public function store(Request $request){
-        $this->validate([
+        $request->validate([
            'customer_id'=> 'required|integer|exists:customers,id',
             'date'=> 'required|date_format:Y-m-d',
             'due_date'=>'required|date_format:Y-m-d',
@@ -93,7 +93,7 @@ class InvoiceController extends Controller
     public function update($id,Request $request){
 
         $invoice = Invoice::findOrFail($id);
-        $this->validate([
+        $request->validate([
             'customer_id'=> 'required|integer|exists:customers,id',
             'date'=> 'required|date_format:Y-m-d',
             'due_date'=>'required|date_format:Y-m-d',

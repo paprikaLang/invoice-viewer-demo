@@ -11,7 +11,7 @@ class Invoice extends Model
 
     protected $fillable = [
        'customer_id','date','due_date','discount',
-        'term_and_conditions'
+        'term_and_conditions','reference'
     ];
 
     protected $guarded = [

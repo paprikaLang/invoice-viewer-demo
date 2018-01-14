@@ -9,7 +9,10 @@
                    <div class="form-group">
                        <label>Customer</label>
                        <typeahead :url="customerURL" :initialize="form.customer"
-                                  @input="onCustomer" />
+                                  @input="onCustomer"></typeahead>
+                       <small class="error-control" v-if="errors.customer_id">
+                           {{errors.customer_id[0]}}
+                       </small>
                    </div>
                </div>
                <div class="col-6">
@@ -62,7 +65,80 @@
                     <th>Total</th>
                   </tr>
                 </thead>
+                <tbody>
+                   <tr v-for="(item, index) in form.items">
+                       <td class="w-14">
+                           <typeahead :url="productURL" :initialize="item.product"
+                                      @input="onProduct(index, $event)"></typeahead>
+                           <small class="error-control" v-if="errors[`items.${index}.product_id`]">
+                               {{errors[`items.${index}.product_id`][0]}}
+                           </small>
+                       </td>
+                       <td class="w-4">
+                           <input type="text" class="form-control" v-model="item.unit_price">
+                           <small class="error-control" v-if="errors[`items.${index}.unit_price`]">
+                               {{errors[`items.${index}.unit_price`][0]}}
+                           </small>
+                       </td>
+                       <td class="w-2">
+                           <input type="text" class="form-control" v-model="item.qty">
+                           <small class="error-control" v-if="errors[`items.${index}.qty`]">
+                               {{errors[`items.${index}.qty`][0]}}
+                           </small>
+                       </td>
+                       <td class="w-4">
+                           <span class="form-control">
+                               {{ Number(item.qty) * Number(item.unit_price) | formatMoney }}
+                           </span>
+                       </td>
+                       <td>
+                          <span class="form-remove" @click="removeItem(index)">&times;</span>
+                       </td>
+                   </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <button class="btn btn-sm"
+                                    @click="addNewLine">Add New Line</button>
+                        </td>
+                        <td class="form-summary">Sub Total</td>
+                        <td>{{subTotal | formatMoney}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="form-summary">Discount</td>
+                        <td>
+                            <input type="text" class="form-control" v-model="form.discount">
+                            <small class="form-control" v-if="errors.discount">
+                                {{errors.discount[0]}}
+                            </small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="form-summary">Grand Total</td>
+                          <td>{{ total | formatMoney }}</td>
+                    </tr>
+                </tfoot>
             </table>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>Terms and Conditions</label>
+                        <textarea class="form-control" v-model="form.term_and_conditions"></textarea>
+                        <small class="error-control" v-if="errors.term_and_conditions">
+                            {{ errors.term_and_conditions[0] }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer flex-end">
+            <div>
+                <button class="btn btn-primary" :disabled="isProcessing" @click="onSave">Save</button>
+                <button class="btn" :disabled="isProcessing" @click="onCancel">Cancel</button>
+            </div>
         </div>
 
     </div>
@@ -78,7 +154,7 @@
             'edit':`/api/invoices/${to.params.id}/edit`
         }
 
-        return urls[to.meta.mode]
+        return (urls[to.meta.mode] || urls['create'])
     }
 
     export default {
@@ -96,7 +172,17 @@
                 method: 'POST',
                 title: 'Create',
                 productURL: '/api/products',
-                customerURL: '/api/customers'
+                customerURL: '/api/customers',
+            }
+        },
+        computed: {
+            subTotal(){
+                return this.form.items.reduce((carry,item) => {
+                    return carry + (Number(item.unit_price) + Number(item.qty))
+                },0)
+            },
+            total(){
+                return this.subTotal - Number(this.form.discount)
             }
         },
         beforeRouteEnter(to,from,next) {
@@ -123,14 +209,54 @@
                 }
                 this.show = true
             },
-            onCustomer(){
-
+            addNewLine(){
+              this.form.items.push({
+                  product_id: null,
+                  product: null,
+                  unit_price: 0,
+                  qty: 1
+              })
             },
-            onProduct(){
-
+            onCustomer(e){
+                const customer = e.target.value
+                Vue.set(this.$data.form,'customer',customer)
+                Vue.set(this.$data.form,'customer_id',customer.id)
             },
-            removeItem(){
+            onProduct(index, e){
+                const product = e.target.value
+                Vue.set(this.form.items[index],'product',product)
+                Vue.set(this.form.items[index],'product_id',product.id)
+                Vue.set(this.form.items[index],'unit_price',product.unit_price)
+            },
+            removeItem(index){
+                 this.form.items.splice(index,1)
+            },
+            onCancel(){
+                if(this.$route.meta.mode === 'edit'){
+                    this.$router.push(`${this.resource}/${this.form.id}`)
+                }else{
+                    this.$router.push(`${this.resource}`)
+                }
+            },
+            onSave(){
+                this.errors = {}
 
+                byMethod(this.method,this.store,this.form)
+                    .then((res) => {
+
+                       this.isProcessing = true
+                       this.success(res)
+               
+               })
+                    .catch((error) => {
+                         if(error.response.status === 422){
+                             this.errors = error.response.data.errors
+                         }
+                         this.isProcessing = false
+                    })
+            },
+            success(res) {
+                this.$router.push(`${this.resource}/${res.data.id}`)
             }
         }
     }
