@@ -1608,6 +1608,7 @@ textarea.form-control {
 .typeahead-dropdown {
   width: 100%;
   position: absolute;
+  z-index: 45;
   padding-top: 5px;
   background: #fff;
   border-right: 1px solid #f2f2f2;
@@ -1641,7 +1642,8 @@ textarea.form-control {
 
 .typeahead-list {
   display: block;
-  margin: 1px;
+  margin: 0;
+  padding: 0;
 }
 
 .typeahead-item {

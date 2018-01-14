@@ -23,6 +23,7 @@
   &-dropdown {
     width: 100%;
     position: absolute;
+    z-index: 45;
     padding-top: 5px;
     background: #fff;
     border-right: 1px solid $border-color;
@@ -50,7 +51,9 @@
   }
   &-list{
     display: block;
-    margin: 1px;
+    margin: 0;
+    padding: 0;
+
   }
   &-item {
     display: block;
