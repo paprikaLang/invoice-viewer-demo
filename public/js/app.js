@@ -17600,7 +17600,7 @@ function byMethod(method, url, data) {
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
-
+    mode: 'history',
     routes: [{ path: '/', component: __webpack_require__("./resources/assets/js/views/invoices/index.vue") }, { path: '/invoices', component: __webpack_require__("./resources/assets/js/views/invoices/index.vue") }, { path: '/invoices/create', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue") }, { path: '/invoices/:id', component: __webpack_require__("./resources/assets/js/views/invoices/show.vue") }, { path: '/invoices/:id/edit', component: __webpack_require__("./resources/assets/js/views/invoices/form.vue"), meta: { mode: 'edit' } }]
 });
 
